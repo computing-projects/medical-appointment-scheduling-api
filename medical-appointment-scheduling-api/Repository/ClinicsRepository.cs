@@ -53,10 +53,10 @@ namespace medical_appointment_scheduling_api.Repositories
         public async Task<List<Doctors>> GetAllDoctors(int Id)
         {
             return await (from doctor in _db.Doctors
-                          join cU in _db.ClinicUsers on doctor.user_id equals cU.user_id
-                          join clinic in _db.Clinics on cU.clinic_id equals clinic.id
-                          where clinic.id == Id
-                          select doctor).DistinctBy(d => d.id).ToListAsync();
+                          join cU in _db.ClinicUsers on doctor.UserId equals cU.UserId
+                          join clinic in _db.Clinics on cU.ClinicId equals clinic.Id
+                          where clinic.Id == Id
+                          select doctor).DistinctBy(d => d.Id).ToListAsync();
         }
     }
 }

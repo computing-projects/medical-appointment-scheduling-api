@@ -53,7 +53,7 @@ namespace medical_appointment_scheduling_api.Repositories
         public async Task<List<DoctorHealthPlans>> GetAllHealthPlansByDoctorIdAsync(int doctorId)
         {
             return await _db.DoctorHealthPlans
-                .Where(dhp => dhp.doctor_Id == doctorId)
+                .Where(dhp => dhp.DoctorId == doctorId)
                 .ToListAsync();
         }
     }

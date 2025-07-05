@@ -31,7 +31,7 @@ namespace medical_appointment_scheduling_api.Repositories
             {
                 _db.Notifications.Add(notification);
                 await _db.SaveChangesAsync();
-                if (notification.id != 0)
+                if (notification.Id != 0)
                 {
                     await new EmailRepository(_db).SendNotificationAsync(notification);
                 }

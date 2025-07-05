@@ -9,20 +9,23 @@ namespace medical_appointment_scheduling_api.Models
     public class Doctors
     {
         [Key]
-        public int id { get; set; }
+        [Column("id")]
+        public int Id { get; set; }
 
-        [ForeignKey(nameof(Users))]
-        public int user_id { get; set; }
+        [ForeignKey("User")]
+        [Column("user_id")]
+        public int UserId { get; set; }
 
         [Required, MaxLength(20)]
-        public string crm { get; set; }
-
-        [Required, Column(TypeName = "varchar(255)")]
-        public SystemEnums.Speciality specialty { get; set; }
-
-        public string? accepted_health_plans { get; set; }
+        [Column("crm")]
+        public string Crm { get; set; }
 
         [Required]
-        public int appointment_duration_min { get; set; }
+        [Column("specialty")]
+        public SystemEnums.Speciality Specialty { get; set; }
+
+        [Required]
+        [Column("appointment_duration_med")]
+        public int AppointmentDurationMed { get; set; }
     }
 }

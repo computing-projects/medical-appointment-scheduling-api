@@ -6,15 +6,22 @@ namespace medical_appointment_scheduling_api.Models
     public class ClinicUsers
     {
         [Key]
-        public int id { get; set; }
+        [Column("id")]
+        public int Id { get; set; }
 
-        [ForeignKey(nameof(Clinics))]
-        public int clinic_id { get; set; }
+        [ForeignKey("Clinic")]
+        [Column("clinic_id")]
+        public int ClinicId { get; set; }
 
-        [ForeignKey(nameof(Users))]
-        public int user_id { get; set; }
+        [ForeignKey("User")]
+        [Column("user_id")]
+        public int UserId { get; set; }
 
-        [Required, Column(TypeName = "varchar(50)")]
-        public SystemEnums.ETipoClinicUser role { get; set; }
+        [Required]
+        [Column("role")]
+        public SystemEnums.ETipoClinicUser Role { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
     }
 }

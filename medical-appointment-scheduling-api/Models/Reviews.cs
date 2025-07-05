@@ -6,17 +6,22 @@ namespace medical_appointment_scheduling_api.Models
     public class Reviews
     {
         [Key]
-        public int id { get; set; }
+        [Column("id")]
+        public int Id { get; set; }
 
-        [ForeignKey(nameof(Appointments))]
-        public int appointment_id { get; set; }
+        [ForeignKey("Appointment")]
+        [Column("appointment_id")]
+        public int AppointmentId { get; set; }
 
         [Required]
-        [Range(1, 5)]
-        public int rating { get; set; }
+        [Column("rating")]
+        public int Rating { get; set; }
 
-        public string? comment { get; set; }
+        [MaxLength(255)]
+        [Column("comment")]
+        public string? Comment { get; set; }
 
-        public DateTime created_at { get; set; } = DateTime.UtcNow;
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
     }
 }

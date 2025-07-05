@@ -8,28 +8,37 @@ namespace medical_appointment_scheduling_api.Models
     public class Appointments
     {
         [Key]
-        public int id { get; set; }
+        [Column("id")]
+        public int Id { get; set; }
 
-        [ForeignKey(nameof(Clinics))]
-        public int clinic_id { get; set; }
+        [Column("clinic_id")]
+        public int? ClinicId { get; set; }
 
-        [ForeignKey(nameof(Doctors))]
-        public int doctor_id { get; set; }
+        [Column("doctor_id")]
+        public int? DoctorId { get; set; }
 
-        [ForeignKey(nameof(Clients))]
-        public int client_id { get; set; }
+        [Column("client_id")]
+        public int? ClientId { get; set; }
 
         [Required]
-        public DateTime appointment_datetime { get; set; }
+        [Column("appointment_datetime")]
+        public DateTime AppointmentDatetime { get; set; }
 
-        [Required, Column(TypeName = "varchar(20)")]
-        public SystemEnums.AppointmentType appointment_type { get; set; }
+        [Required]
+        [Column("appointment_type")]
+        public SystemEnums.AppointmentType AppointmentType { get; set; }
 
-        [Required, Column(TypeName = "varchar(50)")]
-        public SystemEnums.AppointmentStatus status { get; set; }
+        [Required]
+        [Column("status")]
+        public SystemEnums.AppointmentStatus Status { get; set; }
 
-        public string? video_call_link { get; set; }
+        [Column("video_call_link")]
+        public string? VideoCallLink { get; set; }
 
-        public DateTime created_at { get; set; } = DateTime.UtcNow;
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
+
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; }
     }
 }

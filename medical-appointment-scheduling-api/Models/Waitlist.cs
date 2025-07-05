@@ -6,17 +6,25 @@ namespace medical_appointment_scheduling_api.Models
     public class Waitlist
     {
         [Key]
-        public int id { get; set; }
+        [Column("id")]
+        public int Id { get; set; }
 
-        [ForeignKey(nameof(Appointments))]
-        public int appointment_id { get; set; }
+        [ForeignKey("Appointment")]
+        [Column("appointment_id")]
+        public int AppointmentId { get; set; }
 
-        [ForeignKey(nameof(Clients))]
-        public int interested_client_id { get; set; }
+        [ForeignKey("Client")]
+        [Column("interested_client_id")]
+        public int InterestedClientId { get; set; }
 
-        [Required, Column(TypeName = "varchar(50)")]
-        public SystemEnums.WaitlistStatus status { get; set; }
+        [Required]
+        [Column("status")]
+        public SystemEnums.WaitlistStatus Status { get; set; }
 
-        public DateTime created_at { get; set; } = DateTime.UtcNow;
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
+
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; }
     }
 }

@@ -6,23 +6,25 @@ namespace medical_appointment_scheduling_api.Models
     public class Clients
     {
         [Key]
-        public int id { get; set; }
+        [Column("id")]
+        public int Id { get; set; }
 
-        [ForeignKey(nameof(Users))]
-        public int user_id { get; set; }
-
-        [Required, MaxLength(20)]
-        public string rg { get; set; }
+        [ForeignKey("User")]
+        [Column("user_id")]
+        public int UserId { get; set; }
 
         [Required, MaxLength(14)]
-        public string cpf { get; set; }
+        [Column("cpf")]
+        public string Cpf { get; set; }
 
-        [MaxLength(255)]
-        public string? health_plan { get; set; }
+        [Column("health_plan")]
+        public SystemEnums.HealthPlans? HealthPlan { get; set; }
 
-        public string? health_history { get; set; }
+        [Column("health_history")]
+        public string? HealthHistory { get; set; }
 
         [Required]
-        public DateTime date_of_birth { get; set; }
+        [Column("date_of_birth")]
+        public DateTime DateOfBirth { get; set; }
     }
 }

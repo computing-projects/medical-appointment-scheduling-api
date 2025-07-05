@@ -35,9 +35,9 @@ namespace medical_appointment_scheduling_api.Repositories
 
         public async Task SendAppointmentCreationEmailAsync(string to, string subject, string body, MailMessageInfo message)
         {
-            var UserDoctor = await _db.Users.Where(W => W.id == message.Doctor.user_id)
+            var UserDoctor = await _db.Users.Where(W => W.Id == message.Doctor.UserId)
                                             .FirstOrDefaultAsync();
-            var UserClient = await _db.Users.Where(W => W.id == message.Client.user_id)
+            var UserClient = await _db.Users.Where(W => W.Id == message.Client.UserId)
                                             .FirstOrDefaultAsync();
 
             if (UserDoctor == null)
@@ -48,12 +48,12 @@ namespace medical_appointment_scheduling_api.Repositories
             var mailMessage = new MailMessage
             {
                 From = new MailAddress("your-email@example.com"),
-                Subject = $"Consulta Agendada Com Sucesso com Doutor {UserDoctor.name}",
-                Body = $"<p> Consulta de {message.Doctor.specialty} </p>"
+                Subject = $"Consulta Agendada Com Sucesso com Doutor {UserDoctor.Name}",
+                Body = $"<p> Consulta de {message.Doctor.Specialty} </p>"
                      + $"<p> Dia: {message.AppointmentDate.ToString("dd/MM/yyyy")} </p>"
                      + $"<p> Hora: {message.AppointmentDate.ToString("HH:mm:ss")} </p>"
-                     + $"<p> Clínica: {message.Clinic.name} </p>"
-                     + $"<p> Endereço: {message.Clinic.address} </p>"
+                     + $"<p> Clínica: {message.Clinic.Name} </p>"
+                     + $"<p> Endereço: {message.Clinic.Address} </p>"
                      + $"<p> Aguardamos ansiosamente seu comparecimento!! </p>",
                 IsBodyHtml = true
             };
@@ -92,7 +92,7 @@ namespace medical_appointment_scheduling_api.Repositories
 
              */
 
-            switch (notification.type)
+            switch (notification.Type)
             {
                 case SystemEnums.NotificationType.Email:
                     await SendEmailAsync(new MailMessage());

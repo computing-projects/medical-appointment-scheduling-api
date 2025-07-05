@@ -5,10 +5,10 @@ namespace medical_appointment_scheduling_api.Models
 {
     public class DoctorHealthPlans
     {
-        [Key, ForeignKey(nameof(Doctors))]
-        public int doctor_Id { get; set; }
+        [Key, Column("doctor_id")]
+        public int DoctorId { get; set; }
 
-        [Column(TypeName = "varchar(20)")]
-        public SystemEnums.HealthPlans healthPlan { get; set; }
+        [Key, Column("health_plan")]
+        public SystemEnums.HealthPlans HealthPlan { get; set; }
     }
 }

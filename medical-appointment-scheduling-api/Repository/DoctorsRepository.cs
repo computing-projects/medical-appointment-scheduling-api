@@ -53,7 +53,7 @@ namespace medical_appointment_scheduling_api.Repositories
 
         public async Task<List<Doctors>> GetDoctorsByFilter(FiltroMedicos filtro)
         {
-            var medicos = await _db.Doctors.Where(w => w.specialty == filtro.specialty).ToListAsync();
+            var medicos = await _db.Doctors.Where(w => w.Specialty == filtro.specialty).ToListAsync();
             return medicos;
         }
     }

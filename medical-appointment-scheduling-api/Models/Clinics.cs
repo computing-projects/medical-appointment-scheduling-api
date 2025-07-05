@@ -1,30 +1,50 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace medical_appointment_scheduling_api.Models
 {
     public class Clinics
     {
         [Key]
-        public int id { get; set; }
+        [Column("id")]
+        public int Id { get; set; }
 
         [Required, MaxLength(255)]
-        public string name { get; set; }
+        [Column("name")]
+        public string Name { get; set; }
 
         [Required]
-        public string address { get; set; }
+        [Column("cep")]
+        [RegularExpression(@"^\d{8}$")]
+        public string Cep { get; set; }
+
+        [Required]
+        [Column("address")]
+        public string Address { get; set; }
 
         [Required, MaxLength(20)]
-        public string cnpj { get; set; }
+        [Column("cnpj")]
+        public string Cnpj { get; set; }
 
         [Required, MaxLength(255)]
-        public string email { get; set; }
+        [Column("email")]
+        public string Email { get; set; }
 
         [Required, MaxLength(20)]
-        public string phone { get; set; }
+        [Column("phone")]
+        public string Phone { get; set; }
 
         [MaxLength(255)]
-        public string? website { get; set; }
+        [Column("website")]
+        public string? Website { get; set; }
 
-        public DateTime created_at { get; set; } = DateTime.UtcNow;
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
+
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; }
+
+        [Column("deleted_at")]
+        public DateTime? DeletedAt { get; set; }
     }
 }

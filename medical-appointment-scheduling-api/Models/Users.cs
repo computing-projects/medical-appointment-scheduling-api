@@ -8,27 +8,46 @@ namespace medical_appointment_scheduling_api.Models
     public class Users
     {
         [Key]
-        public int id { get; set; }
+        [Column("id")]
+        public int Id { get; set; }
 
         [Required, MaxLength(255)]
-        public string name { get; set; }
+        [Column("name")]
+        public string Name { get; set; }
 
         [Required, MaxLength(255)]
-        public string email { get; set; }
+        [Column("email")]
+        public string Email { get; set; }
 
         [Required]
-        public string password_hash { get; set; }
+        [Column("password_hash")]
+        public string PasswordHash { get; set; }
+
+        [Required]
+        [Column("cep")]
+        [RegularExpression(@"^\d{8}$")]
+        public string Cep { get; set; }
+
+        [Required]
+        [Column("address")]
+        public string Address { get; set; }
 
         [MaxLength(20)]
-        public string? phone { get; set; }
+        [Column("phone")]
+        public string? Phone { get; set; }
 
-        // Creatated to control whether the user is active or not
-        public bool delete { get; set; }
+        [Required]
+        [Column("user_type")]
+        public SystemEnums.ETipoUsuario UserType { get; set; }
 
-        [Required, Column(TypeName = "varchar(50)")]
-        public SystemEnums.ETipoUsuario user_type { get; set; }
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
 
-        public DateTime created_at { get; set; } = DateTime.UtcNow;
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; }
+
+        [Column("deleted_at")]
+        public DateTime? DeletedAt { get; set; }
 
     }
 

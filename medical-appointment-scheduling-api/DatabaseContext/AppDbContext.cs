@@ -9,11 +9,7 @@ namespace medical_appointment_scheduling_api.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<DoctorHealthPlans>()
-                .HasKey(dhp => new { dhp.doctor_Id, dhp.healthPlan });
-
-            modelBuilder.Entity<Schedules>()
-                .Property(s => s.weekday)
-                .HasConversion<string>();
+                .HasKey(dhp => new { dhp.DoctorId, dhp.HealthPlan});
         }
         public DbSet<Appointments> Appointments { get; set; }
         public DbSet<Clients> Clients { get; set; }

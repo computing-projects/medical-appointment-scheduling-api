@@ -6,19 +6,32 @@ namespace medical_appointment_scheduling_api.Models
     public class Notifications
     {
         [Key]
-        public int id { get; set; }
+        [Column("id")]
+        public int Id { get; set; }
 
-        [ForeignKey(nameof(Users))]
-        public int user_id { get; set; }
+        [ForeignKey("User")]
+        [Column("user_id")]
+        public int UserId { get; set; }
 
         [Required]
-        public string message { get; set; }
+        [Column("message")]
+        public string Message { get; set; }
 
-        [Required, Column(TypeName = "varchar(50)")]
-        public SystemEnums.NotificationType type { get; set; }
+        [Required]
+        [Column("type")]
+        public SystemEnums.NotificationType Type { get; set; }
 
-        public bool sent { get; set; } = false;
+        [Required]
+        [Column("status")]
+        public SystemEnums.NotificationStatus Status { get; set; }
 
-        public DateTime created_at { get; set; } = DateTime.UtcNow;
+        [Column("sent")]
+        public bool Sent { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
+
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; }
     }
 }

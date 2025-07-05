@@ -53,14 +53,14 @@ public class AuthController : ControllerBase
         if (user == null)
             return Unauthorized("Usuário ou senha inválidos.");
 
-        var decryptedPassword = EncryptDecrypt.Decrypt(user.password_hash);
+        var decryptedPassword = EncryptDecrypt.Decrypt(user.PasswordHash);
 
-        if (!VerifyPassword(model.Password, user.password_hash))
+        if (!VerifyPassword(model.Password, user.PasswordHash))
             return Unauthorized("Usuário ou senha inválidos.");
 
-        var newToken = _jwtTokenService.GenerateToken(user.email);
+        var newToken = _jwtTokenService.GenerateToken(user.Email);
 
-        return Ok(new TokenDto { email = user.email, token = newToken });
+        return Ok(new TokenDto { email = user.Email, token = newToken });
     }
 
     private bool VerifyPassword(string password, string passwordHash)

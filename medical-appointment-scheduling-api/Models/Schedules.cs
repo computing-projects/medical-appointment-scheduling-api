@@ -6,18 +6,29 @@ namespace medical_appointment_scheduling_api.Models
     public class Schedules
     {
         [Key]
-        public int id { get; set; }
+        [Column("id")]
+        public int Id { get; set; }
 
-        [ForeignKey(nameof(Doctors))]
-        public int doctor_id { get; set; }
-
-        [Required, Column(TypeName = "varchar(20)")]
-        public SystemEnums.Weekday weekday { get; set; }
-
-        [Required]
-        public TimeSpan start_time { get; set; }
+        [ForeignKey("Doctor")]
+        [Column("doctor_id")]
+        public int DoctorId { get; set; }
 
         [Required]
-        public TimeSpan end_time { get; set; }
+        [Column("weekday")]
+        public SystemEnums.Weekday Weekday { get; set; }
+
+        [Required]
+        [Column("start_time")]
+        public TimeOnly StartTime { get; set; }
+
+        [Required]
+        [Column("end_time")]
+        public TimeOnly EndTime { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
+
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; }
     }
 }

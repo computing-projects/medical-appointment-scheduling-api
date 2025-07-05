@@ -23,14 +23,14 @@ namespace medical_appointment_scheduling_api.Repositories
 
         public async Task<Users> GetByIdAsync(int id)
         {
-            return await _db.Users.Where(w => w.id == id).FirstOrDefaultAsync();
+            return await _db.Users.Where(w => w.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<bool> RegisterAsync(Users user)
         {
             try
             {
-                user.password_hash = EncryptDecrypt.Encrypt(user.password_hash);
+                user.PasswordHash = EncryptDecrypt.Encrypt(user.PasswordHash);
                 _db.Users.Add(user);
                 await _db.SaveChangesAsync();
                 return true;
@@ -61,16 +61,16 @@ namespace medical_appointment_scheduling_api.Repositories
 
         public async Task<bool> ResetPasswordAsync(RedefinirSenhaDto redefinir)
         {
-            var qtd = await _db.Users.Where(w => w.id == redefinir.UserId)
-                                     .ExecuteUpdateAsync(spc => spc.SetProperty(s => s.password_hash, EncryptDecrypt.Encrypt(redefinir.SenhaAtual)));
+            var qtd = await _db.Users.Where(w => w.Id == redefinir.UserId)
+                                     .ExecuteUpdateAsync(spc => spc.SetProperty(s => s.PasswordHash, EncryptDecrypt.Encrypt(redefinir.SenhaAtual)));
             return qtd > 0;
         }
 
         public async Task<Users> GetByEmailAsync(string email)
         {
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.email == email);
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (user != null)
-                user.password_hash = EncryptDecrypt.Decrypt(user.password_hash);
+                user.PasswordHash = EncryptDecrypt.Decrypt(user.PasswordHash);
             return user;
         }
     }

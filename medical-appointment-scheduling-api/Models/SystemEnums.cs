@@ -9,6 +9,7 @@ namespace medical_appointment_scheduling_api.Models
             [DefaultValue("admin")] Admin = 1,
             [DefaultValue("doctor")] Doctor = 2,
             [DefaultValue("secretary")] Secretary = 3,
+            [DefaultValue("client")] Client = 4
         }
 
         public enum ETipoClinicUser : sbyte
@@ -20,15 +21,15 @@ namespace medical_appointment_scheduling_api.Models
 
         public enum Speciality : sbyte
         {
-            [DefaultValue("Cardiology")] Cardiology,
-            [DefaultValue("Dermatology")] Dermatology,
-            [DefaultValue("Endocrinology")] Endocrinology,
-            [DefaultValue("Gastroenterology")] Gastroenterology,
-            [DefaultValue("Neurology")] Neurology,
-            [DefaultValue("Orthopedics")] Orthopedics,
-            [DefaultValue("Pediatrics")] Pediatrics,
-            [DefaultValue("Psychiatry")] Psychiatry,
-            [DefaultValue("General")] General
+            [DefaultValue("Cardiology")] Cardiology = 1,
+            [DefaultValue("Dermatology")] Dermatology = 2,
+            [DefaultValue("Endocrinology")] Endocrinology = 3,
+            [DefaultValue("Gastroenterology")] Gastroenterology = 4,
+            [DefaultValue("Neurology")] Neurology = 5,
+            [DefaultValue("Orthopedics")] Orthopedics = 6,
+            [DefaultValue("Pediatrics")] Pediatrics = 7,
+            [DefaultValue("Psychiatry")] Psychiatry = 8,
+            [DefaultValue("General")] General = 9
         }
 
         public enum HealthPlans : sbyte

@@ -53,14 +53,14 @@ namespace medical_appointment_scheduling_api.Repositories
         public async Task<List<Appointments>> GetConsultasAntigas(int id)
         {
             return await _db.Appointments
-                .Where(a => a.client_id == id && a.appointment_datetime < DateTime.Now)
+                .Where(a => a.ClientId == id && a.AppointmentDatetime < DateTime.Now)
                 .ToListAsync();
         }
 
         public async Task<List<Appointments>> GetConsultasPendentes(int id)
         {
             return await _db.Appointments
-                .Where(a => a.client_id == id && a.appointment_datetime >= DateTime.Now)
+                .Where(a => a.ClientId == id && a.AppointmentDatetime >= DateTime.Now)
                 .ToListAsync();
         }
     }
