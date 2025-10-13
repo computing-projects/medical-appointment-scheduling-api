@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
-using FirebaseAdmin.Auth;
+using Supabase.Gotrue;
 using medical_appointment_scheduling_api.Models;
 using medical_appointment_scheduling_api.Models.DTO;
 using medical_appointment_scheduling_api.Repositories;
@@ -13,36 +13,41 @@ public class AuthController : ControllerBase
 {
     private readonly JwtTokenService _jwtTokenService;
     private readonly IUsersRepository _usersRepository;
-    private readonly FirebaseTokenService _firebaseTokenService;
-    public AuthController(JwtTokenService jwtTokenService)
+    private readonly SupabaseTokenService _supabaseTokenService;
+    public AuthController(JwtTokenService jwtTokenService, SupabaseTokenService supabaseTokenService, IUsersRepository usersRepository)
     {
         _jwtTokenService = jwtTokenService;
+        _supabaseTokenService = supabaseTokenService;
+        _usersRepository = usersRepository;
     }
 
-    [HttpPost("FirebaseLogin")]
+    [HttpPost("SupabaseLogin")]
     public async Task<IActionResult> Login([FromBody] LoginUser model)
     {
-        if (string.IsNullOrEmpty(model.FirebaseIdToken))
-            return BadRequest("FirebaseIdToken is required.");
+        if (string.IsNullOrEmpty(model.SupabaseAccessToken))
+            return BadRequest("SupabaseAccessToken is required.");
 
         try
         {
-            var decodedToken = await _firebaseTokenService.VerifyTokenAsync(model.FirebaseIdToken);
-            var uid = decodedToken.Uid;
-            var userEmail = decodedToken.Claims.ContainsKey("email") ? decodedToken.Claims["email"]?.ToString() : null;
+            var user = await _supabaseTokenService.VerifyTokenAsync(model.SupabaseAccessToken);
+            if (user == null)
+                return Unauthorized("Invalid Supabase token.");
+
+            var userEmail = user.Email;
+            var uid = user.Id;
 
             var jwt = _jwtTokenService.GenerateToken(userEmail ?? uid);
 
             return Ok(new TokenDto()
             {
-                firesbaseUIdToken= uid,
+                firesbaseUIdToken = uid,
                 email = userEmail ?? "",
                 token = jwt
             });
         }
-        catch (FirebaseAuthException)
+        catch (UnauthorizedAccessException)
         {
-            return Unauthorized("Invalid Firebase token.");
+            return Unauthorized("Invalid Supabase token.");
         }
     }
 
@@ -51,12 +56,12 @@ public class AuthController : ControllerBase
     {
         var user = await _usersRepository.GetByEmailAsync(model.Username);
         if (user == null)
-            return Unauthorized("Usuário ou senha inválidos.");
+            return Unauthorized("Usuï¿½rio ou senha invï¿½lidos.");
 
         var decryptedPassword = EncryptDecrypt.Decrypt(user.PasswordHash);
 
         if (!VerifyPassword(model.Password, user.PasswordHash))
-            return Unauthorized("Usuário ou senha inválidos.");
+            return Unauthorized("Usuï¿½rio ou senha invï¿½lidos.");
 
         var newToken = _jwtTokenService.GenerateToken(user.Email);
 

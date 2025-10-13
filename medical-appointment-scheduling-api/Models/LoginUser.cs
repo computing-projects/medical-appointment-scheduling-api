@@ -4,6 +4,6 @@
     {
         public string Username { get; set; }
         public string Password { get; set; }
-        public string FirebaseIdToken { get; set; }
+        public string SupabaseAccessToken { get; set; }
     }
 }

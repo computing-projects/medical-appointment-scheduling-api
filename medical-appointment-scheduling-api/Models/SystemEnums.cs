@@ -14,9 +14,9 @@ namespace medical_appointment_scheduling_api.Models
 
         public enum ETipoClinicUser : sbyte
         {
-            [DefaultValue("admin")] Admin = 1,
-            [DefaultValue("doctor")] Doctor = 2,
-            [DefaultValue("secretary")] Secretary = 3
+            [DefaultValue("doctor")] Doctor = 1,
+            [DefaultValue("assistant")] Assistant = 2,
+            [DefaultValue("admin")] Admin = 3
         }
 
         public enum Speciality : sbyte
@@ -62,17 +62,17 @@ namespace medical_appointment_scheduling_api.Models
             [DefaultValue("canceled")] Canceled = 3
         }
 
-        public enum NotificationType : sbyte
+        public enum NotificationChannel : sbyte
         {
             [DefaultValue("email")] Email = 1,
             [DefaultValue("whatsapp")] Whatsapp = 2
         }
 
-        public enum NotificationStatus : sbyte
+        public enum NotificationCategory : sbyte
         {
-            [DefaultValue("pending")] Pending = 1,
-            [DefaultValue("sent")] Sent = 2,
-            [DefaultValue("failed")] Failed = 3
+            [DefaultValue("reminder")] Reminder = 1,
+            [DefaultValue("system")] System = 2,
+            [DefaultValue("alert")] Alert = 3
         }
 
         public enum Weekday : sbyte

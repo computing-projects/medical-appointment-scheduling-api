@@ -1,7 +1,5 @@
 using System.Security.Cryptography;
 using System.Text;
-using FirebaseAdmin;
-using Google.Apis.Auth.OAuth2;
 using medical_appointment_scheduling_api.Data;
 using medical_appointment_scheduling_api.Repositories;
 using medical_appointment_scheduling_api.Services;
@@ -12,11 +10,7 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Initialize Firebase Admin SDK
-FirebaseApp.Create(new AppOptions
-{
-    Credential = GoogleCredential.FromFile("Config/firebase-service-account.json") // Path to your JSON file
-});
+// Supabase configuration will be handled by the SupabaseTokenService
 
 // Add services to the container
 builder.Services.AddControllers();
@@ -85,14 +79,17 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddSingleton(new JwtTokenService("ja9LS02MnUixI/NNYYvjgQbtAg210NK9jrg53yg+fwY=", "https://localhost:44384", "https://localhost:44384"));
-builder.Services.AddSingleton<FirebaseTokenService>();
+builder.Services.AddSingleton<SupabaseTokenService>();
 builder.Services.AddScoped<EmailRepository>();
+builder.Services.AddScoped<IAnamneseRepository, AnamneseRepository>();
 builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
+builder.Services.AddScoped<IClientHealthPlansRepository, ClientHealthPlansRepository>();
 builder.Services.AddScoped<IClientsRepository, ClientsRepository>();
 builder.Services.AddScoped<IClinicsRepository, ClinicsRepository>();
 builder.Services.AddScoped<IClinicUsersRepository, ClinicUsersRepository>();
 builder.Services.AddScoped<IDoctorHealthPlansRepository, DoctorHealthPlansRepository>();
 builder.Services.AddScoped<IDoctorsRepository, DoctorsRepository>();
+builder.Services.AddScoped<IHealthPlansRepository, HealthPlansRepository>();
 builder.Services.AddScoped<INotificationsRepository, NotificationsRepository>();
 builder.Services.AddScoped<IReviewsRepository, ReviewsRepository>();
 builder.Services.AddScoped<ISchedulesRepository, SchedulesRepository>();

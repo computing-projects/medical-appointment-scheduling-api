@@ -20,8 +20,5 @@ namespace medical_appointment_scheduling_api.Models
         [Required]
         [Column("role")]
         public SystemEnums.ETipoClinicUser Role { get; set; }
-
-        [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
     }
 }

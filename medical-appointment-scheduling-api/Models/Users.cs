@@ -37,8 +37,8 @@ namespace medical_appointment_scheduling_api.Models
         public string? Phone { get; set; }
 
         [Required]
-        [Column("user_type")]
-        public SystemEnums.ETipoUsuario UserType { get; set; }
+        [Column("role")]
+        public SystemEnums.ETipoUsuario Role { get; set; }
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }

@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace medical_appointment_scheduling_api.Models
 {
-    public class Waitlist
+    public class Anamnese
     {
         [Key]
         [Column("id")]
@@ -13,17 +13,14 @@ namespace medical_appointment_scheduling_api.Models
         [Column("client_id")]
         public int ClientId { get; set; }
 
-        [ForeignKey("Appointment")]
-        [Column("appointment_id")]
-        public int AppointmentId { get; set; }
+        [Column("medical_history")]
+        public string? MedicalHistory { get; set; }
 
-        [Required]
-        [Column("position")]
-        public int Position { get; set; }
+        [Column("allergies")]
+        public string? Allergies { get; set; }
 
-        [Required]
-        [Column("status")]
-        public SystemEnums.WaitlistStatus Status { get; set; }
+        [Column("notes")]
+        public string? Notes { get; set; }
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
