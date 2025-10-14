@@ -56,15 +56,12 @@ public class AuthController : ControllerBase
     {
         var user = await _usersRepository.GetByEmailAsync(model.Username);
         if (user == null)
-            return Unauthorized("Usu�rio ou senha inv�lidos.");
-
-        var decryptedPassword = EncryptDecrypt.Decrypt(user.PasswordHash);
+            return Unauthorized("Usuário ou senha inválidos.");
 
         if (!VerifyPassword(model.Password, user.PasswordHash))
-            return Unauthorized("Usu�rio ou senha inv�lidos.");
+            return Unauthorized("Usuário ou senha inválidos.");
 
         var newToken = _jwtTokenService.GenerateToken(user.Email);
-
         return Ok(new TokenDto { email = user.Email, token = newToken });
     }
 

@@ -51,54 +51,13 @@ namespace medical_appointment_scheduling_api.Models
 
     }
 
-    public static class EncryptDecrypt
+    public static class PasswordHasher
     {
-        // Use a 32-byte key for AES-256
-        private static readonly byte[] Key = GetOrCreateKey(32);
-        private static readonly byte[] IV = GetOrCreateIV(16);
-
-        private static byte[] GetOrCreateKey(int sizeInBytes)
+        public static string Hash(string plainText)
         {
-            // For simplicity, generating on the fly. In production, load from secure config.
-            return RandomNumberGenerator.GetBytes(sizeInBytes);
-        }
-    
-        private static byte[] GetOrCreateIV(int sizeInBytes)
-        {
-            // For simplicity, generating on the fly. In production, load from secure config.
-            return RandomNumberGenerator.GetBytes(sizeInBytes);
-        }
-
-        public static string Encrypt(string plainText)
-        {
-            using var aes = Aes.Create();
-            aes.KeySize = 256;
-            aes.Key = Key;
-            aes.IV = IV;
-
-            var encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
-            using var ms = new MemoryStream();
-            using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
-            using (var sw = new StreamWriter(cs))
-            {
-                sw.Write(plainText);
-            }
-            return Convert.ToBase64String(ms.ToArray());
-        }
-
-        public static string Decrypt(string cipherText)
-        {
-            using var aes = Aes.Create();
-            aes.KeySize = 256;
-            aes.Key = Key;
-            aes.IV = IV;
-
-            var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-            var buffer = Convert.FromBase64String(cipherText);
-            using var ms = new MemoryStream(buffer);
-            using var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read);
-            using var sr = new StreamReader(cs);
-            return sr.ReadToEnd();
+            using var sha = System.Security.Cryptography.SHA256.Create();
+            var hashBytes = sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(plainText));
+            return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
         }
     }
 }
