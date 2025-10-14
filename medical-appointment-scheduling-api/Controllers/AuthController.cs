@@ -21,47 +21,15 @@ public class AuthController : ControllerBase
         _usersRepository = usersRepository;
     }
 
-    [HttpPost("SupabaseLogin")]
-    public async Task<IActionResult> Login([FromBody] LoginUser model)
-    {
-        if (string.IsNullOrEmpty(model.SupabaseAccessToken))
-            return BadRequest("SupabaseAccessToken is required.");
-
-        try
-        {
-            var user = await _supabaseTokenService.VerifyTokenAsync(model.SupabaseAccessToken);
-            if (user == null)
-                return Unauthorized("Invalid Supabase token.");
-
-            var userEmail = user.Email;
-            var uid = user.Id;
-
-            var jwt = _jwtTokenService.GenerateToken(userEmail ?? uid);
-
-            return Ok(new TokenDto()
-            {
-                firesbaseUIdToken = uid,
-                email = userEmail ?? "",
-                token = jwt
-            });
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return Unauthorized("Invalid Supabase token.");
-        }
-    }
-
     [HttpPost("DirectLogin")]
     public async Task<IActionResult> LoginNormal([FromBody] LoginUser model)
     {
-        var user = await _usersRepository.GetByEmailAsync(model.Username);
-        if (user == null)
+        if (!ModelState.IsValid)
+            return BadRequest("Invalid payload.");
+        var user = await _usersRepository.GetByEmailAsync(model.Email);
+        if (user == null || !VerifyPassword(model.Password, user.PasswordHash))
             return Unauthorized("Usuário ou senha inválidos.");
-
-        if (!VerifyPassword(model.Password, user.PasswordHash))
-            return Unauthorized("Usuário ou senha inválidos.");
-
-        var newToken = _jwtTokenService.GenerateToken(user.Email);
+        var newToken = _jwtTokenService.GenerateToken(user.Email, user.Id);
         return Ok(new TokenDto { email = user.Email, token = newToken });
     }
 
