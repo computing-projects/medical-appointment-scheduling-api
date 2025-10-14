@@ -29,7 +29,7 @@ namespace medical_appointment_scheduling_api.Models
 
         [Required]
         [Column("appointment_datetime")]
-        public DateTime AppointmentDatetime { get; set; }
+        public DateTimeOffset AppointmentDatetime { get; set; }
 
         [Required]
         [Column("appointment_type")]
@@ -43,9 +43,9 @@ namespace medical_appointment_scheduling_api.Models
         public string? VideoCallLink { get; set; }
 
         [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         [Column("updated_at")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTimeOffset UpdatedAt { get; set; }
     }
 }

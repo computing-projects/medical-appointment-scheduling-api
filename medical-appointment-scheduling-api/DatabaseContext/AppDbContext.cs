@@ -13,6 +13,18 @@ namespace medical_appointment_scheduling_api.Data
                 .Property(u => u.Role)
                 .HasConversion<string>();
 
+            modelBuilder.Entity<Users>()
+                .Property(u => u.CreatedAt)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Users>()
+                .Property(u => u.UpdatedAt)
+                .ValueGeneratedOnAddOrUpdate();
+
+            modelBuilder.Entity<Users>()
+                .Property(u => u.DeletedAt)
+                .ValueGeneratedOnAddOrUpdate();
+
             modelBuilder.Entity<Doctors>()
                 .Property(d => d.Specialty)
                 .HasConversion<string>();

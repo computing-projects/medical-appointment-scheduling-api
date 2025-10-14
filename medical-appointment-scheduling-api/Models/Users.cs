@@ -38,28 +38,41 @@ namespace medical_appointment_scheduling_api.Models
 
         [Required]
         [Column("role")]
-        public SystemEnums.ETipoUsuario Role { get; set; }
+        public string Role { get; set; }
 
         [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         [Column("updated_at")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTimeOffset UpdatedAt { get; set; }
 
         [Column("deleted_at")]
-        public DateTime? DeletedAt { get; set; }
+        public DateTimeOffset DeletedAt { get; set; }
 
     }
 
     public static class EncryptDecrypt
     {
         // Use a 32-byte key for AES-256
-        private static readonly byte[] Key = Encoding.UTF8.GetBytes("Your32CharLongEncryptionKey!123456");
-        private static readonly byte[] IV = Encoding.UTF8.GetBytes("16CharInitVector!");
+        private static readonly byte[] Key = GetOrCreateKey(32);
+        private static readonly byte[] IV = GetOrCreateIV(16);
+
+        private static byte[] GetOrCreateKey(int sizeInBytes)
+        {
+            // For simplicity, generating on the fly. In production, load from secure config.
+            return RandomNumberGenerator.GetBytes(sizeInBytes);
+        }
+    
+        private static byte[] GetOrCreateIV(int sizeInBytes)
+        {
+            // For simplicity, generating on the fly. In production, load from secure config.
+            return RandomNumberGenerator.GetBytes(sizeInBytes);
+        }
 
         public static string Encrypt(string plainText)
         {
             using var aes = Aes.Create();
+            aes.KeySize = 256;
             aes.Key = Key;
             aes.IV = IV;
 
@@ -76,6 +89,7 @@ namespace medical_appointment_scheduling_api.Models
         public static string Decrypt(string cipherText)
         {
             using var aes = Aes.Create();
+            aes.KeySize = 256;
             aes.Key = Key;
             aes.IV = IV;
 

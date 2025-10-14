@@ -27,6 +27,6 @@ namespace medical_appointment_scheduling_api.Models
 
         [Required]
         [Column("birth_date")]
-        public DateTime BirthDate { get; set; }
+        public DateTimeOffset BirthDate { get; set; }
     }
 }

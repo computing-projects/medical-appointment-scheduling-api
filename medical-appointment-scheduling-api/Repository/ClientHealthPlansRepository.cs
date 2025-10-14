@@ -6,58 +6,58 @@ namespace medical_appointment_scheduling_api.Repositories
 {
     public class ClientHealthPlansRepository : IClientHealthPlansRepository
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _db;
 
         public ClientHealthPlansRepository(AppDbContext context)
         {
-            _context = context;
+            _db = context;
         }
 
         public async Task<IEnumerable<ClientHealthPlans>> GetAllAsync()
         {
-            return await _context.ClientHealthPlans.ToListAsync();
+            return await _db.ClientHealthPlans.ToListAsync();
         }
 
         public async Task<ClientHealthPlans?> GetByIdAsync(int id)
         {
-            return await _context.ClientHealthPlans.FindAsync(id);
+            return await _db.ClientHealthPlans.FindAsync(id);
         }
 
         public async Task<IEnumerable<ClientHealthPlans>> GetByClientIdAsync(int clientId)
         {
-            return await _context.ClientHealthPlans
+            return await _db.ClientHealthPlans
                 .Where(chp => chp.ClientId == clientId)
                 .ToListAsync();
         }
 
         public async Task<ClientHealthPlans> CreateAsync(ClientHealthPlans clientHealthPlan)
         {
-            _context.ClientHealthPlans.Add(clientHealthPlan);
-            await _context.SaveChangesAsync();
+            _db.ClientHealthPlans.Add(clientHealthPlan);
+            await _db.SaveChangesAsync();
             return clientHealthPlan;
         }
 
         public async Task<ClientHealthPlans?> UpdateAsync(ClientHealthPlans clientHealthPlan)
         {
-            var existingClientHealthPlan = await _context.ClientHealthPlans.FindAsync(clientHealthPlan.Id);
+            var existingClientHealthPlan = await _db.ClientHealthPlans.FindAsync(clientHealthPlan.Id);
             if (existingClientHealthPlan == null)
                 return null;
 
             existingClientHealthPlan.ClientId = clientHealthPlan.ClientId;
             existingClientHealthPlan.HealthPlanId = clientHealthPlan.HealthPlanId;
 
-            await _context.SaveChangesAsync();
+            await _db.SaveChangesAsync();
             return existingClientHealthPlan;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var clientHealthPlan = await _context.ClientHealthPlans.FindAsync(id);
+            var clientHealthPlan = await _db.ClientHealthPlans.FindAsync(id);
             if (clientHealthPlan == null)
                 return false;
 
-            _context.ClientHealthPlans.Remove(clientHealthPlan);
-            await _context.SaveChangesAsync();
+            _db.ClientHealthPlans.Remove(clientHealthPlan);
+            await _db.SaveChangesAsync();
             return true;
         }
     }

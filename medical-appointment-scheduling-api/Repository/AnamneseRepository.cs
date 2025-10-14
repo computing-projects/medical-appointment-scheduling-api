@@ -6,61 +6,58 @@ namespace medical_appointment_scheduling_api.Repositories
 {
     public class AnamneseRepository : IAnamneseRepository
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _db;
 
         public AnamneseRepository(AppDbContext context)
         {
-            _context = context;
+            _db = context;
         }
 
         public async Task<IEnumerable<Anamnese>> GetAllAsync()
         {
-            return await _context.Anamnese.ToListAsync();
+            return await _db.Anamnese.ToListAsync();
         }
 
         public async Task<Anamnese?> GetByIdAsync(int id)
         {
-            return await _context.Anamnese.FindAsync(id);
+            return await _db.Anamnese.FindAsync(id);
         }
 
         public async Task<Anamnese?> GetByClientIdAsync(int clientId)
         {
-            return await _context.Anamnese
+            return await _db.Anamnese
                 .FirstOrDefaultAsync(a => a.ClientId == clientId);
         }
 
         public async Task<Anamnese> CreateAsync(Anamnese anamnese)
         {
-            anamnese.CreatedAt = DateTime.UtcNow;
-            anamnese.UpdatedAt = DateTime.UtcNow;
-            _context.Anamnese.Add(anamnese);
-            await _context.SaveChangesAsync();
+            _db.Anamnese.Add(anamnese);
+            await _db.SaveChangesAsync();
             return anamnese;
         }
 
         public async Task<Anamnese?> UpdateAsync(Anamnese anamnese)
         {
-            var existingAnamnese = await _context.Anamnese.FindAsync(anamnese.Id);
+            var existingAnamnese = await _db.Anamnese.FindAsync(anamnese.Id);
             if (existingAnamnese == null)
                 return null;
 
             existingAnamnese.MedicalHistory = anamnese.MedicalHistory;
             existingAnamnese.Allergies = anamnese.Allergies;
             existingAnamnese.Notes = anamnese.Notes;
-            existingAnamnese.UpdatedAt = DateTime.UtcNow;
 
-            await _context.SaveChangesAsync();
+            await _db.SaveChangesAsync();
             return existingAnamnese;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var anamnese = await _context.Anamnese.FindAsync(id);
+            var anamnese = await _db.Anamnese.FindAsync(id);
             if (anamnese == null)
                 return false;
 
-            _context.Anamnese.Remove(anamnese);
-            await _context.SaveChangesAsync();
+            _db.Anamnese.Remove(anamnese);
+            await _db.SaveChangesAsync();
             return true;
         }
     }

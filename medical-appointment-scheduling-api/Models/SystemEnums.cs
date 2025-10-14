@@ -4,14 +4,6 @@ namespace medical_appointment_scheduling_api.Models
 {
     public class SystemEnums
     {
-        public enum ETipoUsuario : sbyte
-        {
-            [DefaultValue("admin")] Admin = 1,
-            [DefaultValue("doctor")] Doctor = 2,
-            [DefaultValue("secretary")] Secretary = 3,
-            [DefaultValue("client")] Client = 4
-        }
-
         public enum ETipoClinicUser : sbyte
         {
             [DefaultValue("doctor")] Doctor = 1,

@@ -21,6 +21,6 @@ namespace medical_appointment_scheduling_api.Models
         public string? Comment { get; set; }
 
         [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
     }
 }
