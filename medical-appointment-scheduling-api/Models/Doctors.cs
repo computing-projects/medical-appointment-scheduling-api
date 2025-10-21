@@ -23,9 +23,5 @@ namespace medical_appointment_scheduling_api.Models
         [Required]
         [Column("specialty")]
         public SystemEnums.Speciality Specialty { get; set; }
-
-        [Required]
-        [Column("appointment_duration_med")]
-        public int AppointmentDurationMed { get; set; }
     }
 }

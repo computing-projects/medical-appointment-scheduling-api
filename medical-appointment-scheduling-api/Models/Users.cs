@@ -37,54 +37,27 @@ namespace medical_appointment_scheduling_api.Models
         public string? Phone { get; set; }
 
         [Required]
-        [Column("user_type")]
-        public SystemEnums.ETipoUsuario UserType { get; set; }
+        [Column("role")]
+        public string Role { get; set; }
 
         [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         [Column("updated_at")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTimeOffset UpdatedAt { get; set; }
 
         [Column("deleted_at")]
-        public DateTime? DeletedAt { get; set; }
+        public DateTimeOffset DeletedAt { get; set; }
 
     }
 
-    public static class EncryptDecrypt
+    public static class PasswordHasher
     {
-        // Use a 32-byte key for AES-256
-        private static readonly byte[] Key = Encoding.UTF8.GetBytes("Your32CharLongEncryptionKey!123456");
-        private static readonly byte[] IV = Encoding.UTF8.GetBytes("16CharInitVector!");
-
-        public static string Encrypt(string plainText)
+        public static string Hash(string plainText)
         {
-            using var aes = Aes.Create();
-            aes.Key = Key;
-            aes.IV = IV;
-
-            var encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
-            using var ms = new MemoryStream();
-            using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
-            using (var sw = new StreamWriter(cs))
-            {
-                sw.Write(plainText);
-            }
-            return Convert.ToBase64String(ms.ToArray());
-        }
-
-        public static string Decrypt(string cipherText)
-        {
-            using var aes = Aes.Create();
-            aes.Key = Key;
-            aes.IV = IV;
-
-            var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-            var buffer = Convert.FromBase64String(cipherText);
-            using var ms = new MemoryStream(buffer);
-            using var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read);
-            using var sr = new StreamReader(cs);
-            return sr.ReadToEnd();
+            using var sha = System.Security.Cryptography.SHA256.Create();
+            var hashBytes = sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(plainText));
+            return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
         }
     }
 }

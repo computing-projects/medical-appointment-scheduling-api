@@ -17,11 +17,10 @@ namespace medical_appointment_scheduling_api.Models
         [Column("rating")]
         public int Rating { get; set; }
 
-        [MaxLength(255)]
         [Column("comment")]
         public string? Comment { get; set; }
 
         [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
     }
 }

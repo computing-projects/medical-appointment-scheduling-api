@@ -1,9 +1,12 @@
-﻿namespace medical_appointment_scheduling_api.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace medical_appointment_scheduling_api.Models
 {
     public class LoginUser
     {
-        public string Username { get; set; }
+        [Required]
+        public string Email { get; set; }
+        [Required]
         public string Password { get; set; }
-        public string FirebaseIdToken { get; set; }
     }
 }

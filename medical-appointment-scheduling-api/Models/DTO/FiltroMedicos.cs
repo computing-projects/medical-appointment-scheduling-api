@@ -3,7 +3,7 @@
     public class FiltroMedicos
     {
         public SystemEnums.Speciality specialty { get; set; }
-        public DateTime InitialDate { get; set; }
-        public DateTime FinalDate { get; set; }
+        public DateTimeOffset InitialDate { get; set; }
+        public DateTimeOffset FinalDate { get; set; }
     }
 }

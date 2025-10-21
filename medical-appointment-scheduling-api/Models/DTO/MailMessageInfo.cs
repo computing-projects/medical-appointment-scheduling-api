@@ -4,7 +4,7 @@
     {
         public Doctors Doctor { get; set; }
         public Clients Client { get; set; }
-        public DateTime AppointmentDate { get; set; }
+        public DateTimeOffset AppointmentDate { get; set; }
         public Clinics Clinic { get; set; }
     }
 }

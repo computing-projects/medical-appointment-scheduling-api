@@ -6,9 +6,6 @@ using medical_appointment_scheduling_api.Models.DTO;
 using System.Security.Cryptography;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using System.Linq;
-using FirebaseAdmin;
-using Google.Apis.Auth.OAuth2;
 using medical_appointment_scheduling_api.Data;
 using Microsoft.EntityFrameworkCore;
 using medical_appointment_scheduling_api.Services;
@@ -52,8 +49,8 @@ namespace medical_appointment_scheduling_api.Repositories
                 Body = $"<p> Consulta de {message.Doctor.Specialty} </p>"
                      + $"<p> Dia: {message.AppointmentDate.ToString("dd/MM/yyyy")} </p>"
                      + $"<p> Hora: {message.AppointmentDate.ToString("HH:mm:ss")} </p>"
-                     + $"<p> Clínica: {message.Clinic.Name} </p>"
-                     + $"<p> Endereço: {message.Clinic.Address} </p>"
+                     + $"<p> Clï¿½nica: {message.Clinic.Name} </p>"
+                     + $"<p> Endereï¿½o: {message.Clinic.Address} </p>"
                      + $"<p> Aguardamos ansiosamente seu comparecimento!! </p>",
                 IsBodyHtml = true
             };
@@ -61,7 +58,7 @@ namespace medical_appointment_scheduling_api.Repositories
             mailMessage.To.Add(to);
 
             var result = await SendEmailAsync(mailMessage);
-            //Apenas para completar, será alterado depois
+            //Apenas para completar, serï¿½ alterado depois
             if (result)
             {
                 Console.WriteLine("Email sent successfully."); 
@@ -88,19 +85,19 @@ namespace medical_appointment_scheduling_api.Repositories
         public async Task SendNotificationAsync(Notifications notification)
         {
             /*
-             Montar aqui a lógica para enviar notificações, seja email ou mensagem SMS
+             Montar aqui a lï¿½gica para enviar notificaï¿½ï¿½es, seja email ou mensagem SMS
 
              */
 
-            switch (notification.Type)
+            switch (notification.Channel)
             {
-                case SystemEnums.NotificationType.Email:
+                case SystemEnums.NotificationChannel.Email:
                     await SendEmailAsync(new MailMessage());
                     break;
-                case SystemEnums.NotificationType.Whatsapp:
+                case SystemEnums.NotificationChannel.Whatsapp:
                     break;
                 default:
-                    throw new NotImplementedException("Notification type not implemented");
+                    throw new NotImplementedException("Notification channel not implemented");
             }
         }
     }

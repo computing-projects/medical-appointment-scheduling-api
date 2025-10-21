@@ -18,20 +18,20 @@ namespace medical_appointment_scheduling_api.Models
         public string Message { get; set; }
 
         [Required]
-        [Column("type")]
-        public SystemEnums.NotificationType Type { get; set; }
+        [Column("channel")]
+        public SystemEnums.NotificationChannel Channel { get; set; }
 
         [Required]
-        [Column("status")]
-        public SystemEnums.NotificationStatus Status { get; set; }
+        [Column("category")]
+        public SystemEnums.NotificationCategory Category { get; set; }
 
         [Column("sent")]
-        public bool Sent { get; set; }
+        public bool Sent { get; set; } = false;
 
         [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         [Column("updated_at")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTimeOffset UpdatedAt { get; set; }
     }
 }

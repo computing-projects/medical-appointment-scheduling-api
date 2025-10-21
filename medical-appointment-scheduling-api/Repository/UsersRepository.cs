@@ -30,7 +30,7 @@ namespace medical_appointment_scheduling_api.Repositories
         {
             try
             {
-                user.PasswordHash = EncryptDecrypt.Encrypt(user.PasswordHash);
+                user.PasswordHash = PasswordHasher.Hash(user.PasswordHash);
                 _db.Users.Add(user);
                 await _db.SaveChangesAsync();
                 return true;
@@ -61,16 +61,15 @@ namespace medical_appointment_scheduling_api.Repositories
 
         public async Task<bool> ResetPasswordAsync(RedefinirSenhaDto redefinir)
         {
-            var qtd = await _db.Users.Where(w => w.Id == redefinir.UserId)
-                                     .ExecuteUpdateAsync(spc => spc.SetProperty(s => s.PasswordHash, EncryptDecrypt.Encrypt(redefinir.SenhaAtual)));
+            var qtd = await _db.Users.Where(w => w.Email == redefinir.Email)
+                .ExecuteUpdateAsync(spc => spc.SetProperty(s => s.PasswordHash, PasswordHasher.Hash(redefinir.NovaSenha)));
             return qtd > 0;
         }
 
         public async Task<Users> GetByEmailAsync(string email)
         {
+            // Do not decrypt; password hashes are one-way now
             var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
-            if (user != null)
-                user.PasswordHash = EncryptDecrypt.Decrypt(user.PasswordHash);
             return user;
         }
     }

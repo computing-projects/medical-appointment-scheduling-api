@@ -13,6 +13,10 @@ namespace medical_appointment_scheduling_api.Models
         [Column("doctor_id")]
         public int DoctorId { get; set; }
 
+        [ForeignKey("Clinic")]
+        [Column("clinic_id")]
+        public int ClinicId { get; set; }
+
         [Required]
         [Column("weekday")]
         public SystemEnums.Weekday Weekday { get; set; }
@@ -25,10 +29,7 @@ namespace medical_appointment_scheduling_api.Models
         [Column("end_time")]
         public TimeOnly EndTime { get; set; }
 
-        [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
-
-        [Column("updated_at")]
-        public DateTime UpdatedAt { get; set; }
+        [Column("available")]
+        public bool Available { get; set; } = true;
     }
 }

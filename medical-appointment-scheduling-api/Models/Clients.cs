@@ -13,18 +13,20 @@ namespace medical_appointment_scheduling_api.Models
         [Column("user_id")]
         public int UserId { get; set; }
 
+        [Required, MaxLength(20)]
+        [Column("rg")]
+        public string Rg { get; set; }
+
         [Required, MaxLength(14)]
         [Column("cpf")]
         public string Cpf { get; set; }
 
-        [Column("health_plan")]
-        public SystemEnums.HealthPlans? HealthPlan { get; set; }
-
-        [Column("health_history")]
-        public string? HealthHistory { get; set; }
+        [MaxLength(20)]
+        [Column("phone")]
+        public string? Phone { get; set; }
 
         [Required]
-        [Column("date_of_birth")]
-        public DateTime DateOfBirth { get; set; }
+        [Column("birth_date")]
+        public DateTimeOffset BirthDate { get; set; }
     }
 }

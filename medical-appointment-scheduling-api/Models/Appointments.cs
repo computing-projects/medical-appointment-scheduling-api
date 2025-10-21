@@ -11,18 +11,25 @@ namespace medical_appointment_scheduling_api.Models
         [Column("id")]
         public int Id { get; set; }
 
-        [Column("clinic_id")]
-        public int? ClinicId { get; set; }
-
-        [Column("doctor_id")]
-        public int? DoctorId { get; set; }
-
+        [ForeignKey("Client")]
         [Column("client_id")]
-        public int? ClientId { get; set; }
+        public int ClientId { get; set; }
+
+        [ForeignKey("Doctor")]
+        [Column("doctor_id")]
+        public int DoctorId { get; set; }
+
+        [ForeignKey("Clinic")]
+        [Column("clinic_id")]
+        public int ClinicId { get; set; }
+
+        [ForeignKey("Schedule")]
+        [Column("schedule_id")]
+        public int ScheduleId { get; set; }
 
         [Required]
         [Column("appointment_datetime")]
-        public DateTime AppointmentDatetime { get; set; }
+        public DateTimeOffset AppointmentDatetime { get; set; }
 
         [Required]
         [Column("appointment_type")]
@@ -36,9 +43,9 @@ namespace medical_appointment_scheduling_api.Models
         public string? VideoCallLink { get; set; }
 
         [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         [Column("updated_at")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTimeOffset UpdatedAt { get; set; }
     }
 }
