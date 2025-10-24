@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using medical_appointment_scheduling_api.Data;
+using medical_appointment_scheduling_api.Models.DTO;
 using medical_appointment_scheduling_api.Repositories;
 using medical_appointment_scheduling_api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -94,7 +95,8 @@ builder.Services.AddScoped<INotificationsRepository, NotificationsRepository>();
 builder.Services.AddScoped<IReviewsRepository, ReviewsRepository>();
 builder.Services.AddScoped<ISchedulesRepository, SchedulesRepository>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
-builder.Services.AddScoped<IWaitlistRepository, WaitlistRepository>();
+builder.Services.AddScoped<IWaitlistRepository, WaitlistRepository>(); 
+builder.Services.AddScoped<UserData>();
 
 var app = builder.Build();
 
