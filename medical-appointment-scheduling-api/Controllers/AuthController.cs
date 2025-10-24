@@ -14,11 +14,13 @@ public class AuthController : ControllerBase
     private readonly JwtTokenService _jwtTokenService;
     private readonly IUsersRepository _usersRepository;
     private readonly SupabaseTokenService _supabaseTokenService;
-    public AuthController(JwtTokenService jwtTokenService, SupabaseTokenService supabaseTokenService, IUsersRepository usersRepository)
+    private readonly UserData _userData;
+    public AuthController(JwtTokenService jwtTokenService, SupabaseTokenService supabaseTokenService, IUsersRepository usersRepository, UserData userData)
     {
         _jwtTokenService = jwtTokenService;
         _supabaseTokenService = supabaseTokenService;
         _usersRepository = usersRepository;
+        _userData = userData;
     }
 
     [HttpPost("DirectLogin")]
@@ -30,6 +32,15 @@ public class AuthController : ControllerBase
         if (user == null || !VerifyPassword(model.Password, user.PasswordHash))
             return Unauthorized("Usuário ou senha inválidos.");
         var newToken = _jwtTokenService.GenerateToken(user.Email, user.Id);
+
+        // Aqui você define os valores da “global”
+        _userData.UserId = user.Id;
+        _userData.UserRole = user.Role;
+        if (_userData.UserRole == SystemEnums.EUserRole.Client)
+            _userData.MedicId = await _usersRepository.GetUserMedicId(user.Id);
+        if (_userData.UserRole == SystemEnums.EUserRole.Medic)
+            _userData.ClientId = await _usersRepository.GetUserClientId(user.Id);
+
         return Ok(new TokenDto { email = user.Email, token = newToken });
     }
 

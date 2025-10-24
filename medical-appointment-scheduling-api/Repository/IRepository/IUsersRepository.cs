@@ -13,5 +13,7 @@ namespace medical_appointment_scheduling_api.Repositories
         Task<bool> DeleteAsync(int id);
         Task<bool> ResetPasswordAsync(RedefinirSenhaDto senha);
         Task<Users> GetByEmailAsync(string Email);
+        Task<int> GetUserMedicId(int userId);
+        Task<int> GetUserClientId(int userId);
     }
 }

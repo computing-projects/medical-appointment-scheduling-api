@@ -84,5 +84,11 @@ namespace medical_appointment_scheduling_api.Models
             [DefaultValue("delivered")] Delivered = 2,
             [DefaultValue("read")] Read = 3
         }
+
+        public enum EUserRole : sbyte
+        {
+            [DefaultValue("client")] Client = 1,
+            [DefaultValue("Medic")] Medic = 2,
+        }
     }
 }

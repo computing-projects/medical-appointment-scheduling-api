@@ -72,5 +72,15 @@ namespace medical_appointment_scheduling_api.Repositories
             var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
             return user;
         }
+
+        public async Task<int> GetUserMedicId(int userId)
+        {
+            return await _db.Doctors.Where(w => w.UserId == userId).Select(s => s.Id).FirstOrDefaultAsync();
+        }
+
+        public async Task<int> GetUserClientId(int userId)
+        {
+            return await _db.Clients.Where(w => w.UserId == userId).Select(s => s.Id).FirstOrDefaultAsync();
+        }
     }
 }
