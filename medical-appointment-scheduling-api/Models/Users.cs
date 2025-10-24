@@ -38,7 +38,7 @@ namespace medical_appointment_scheduling_api.Models
 
         [Required]
         [Column("role")]
-        public string Role { get; set; }
+        public SystemEnums.EUserRole Role { get; set; }
 
         [Column("created_at")]
         public DateTimeOffset CreatedAt { get; set; }
