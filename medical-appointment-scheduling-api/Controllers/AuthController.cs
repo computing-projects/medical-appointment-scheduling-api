@@ -30,7 +30,7 @@ public class AuthController : ControllerBase
         if (user == null || !VerifyPassword(model.Password, user.PasswordHash))
             return Unauthorized("Usuário ou senha inválidos.");
         var newToken = _jwtTokenService.GenerateToken(user.Email, user.Id);
-        return Ok(new TokenDto { email = user.Email, token = newToken });
+        return Ok(new TokenDto { email = user.Email, token = newToken, role = user.Role});
     }
 
     private bool VerifyPassword(string password, string passwordHash)
