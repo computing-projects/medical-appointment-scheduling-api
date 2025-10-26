@@ -1,26 +1,16 @@
-using System.Security.Cryptography;
-using System.Text;
 using medical_appointment_scheduling_api.Data;
+using medical_appointment_scheduling_api.Middleware;
 using medical_appointment_scheduling_api.Repositories;
 using medical_appointment_scheduling_api.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Supabase configuration will be handled by the SupabaseTokenService
-
 // Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var keyTrial = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32)); // 32 bytes = 256 bits
-Console.WriteLine($"Secret Key: {keyTrial}");
-
-// Add services to the container.
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
@@ -55,30 +45,17 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Ensure the following NuGet package is installed in your project:
-// Microsoft.EntityFrameworkCore.SqlServer
-// Configure JWT authentication
-var key = Encoding.ASCII.GetBytes("ja9LS02MnUixI/NNYYvjgQbtAg210NK9jrg53yg+fwY="); // Replace with your secret key
+// Add authentication with a default scheme (required even with custom middleware)
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = "Bearer";
+    options.DefaultChallengeScheme = "Bearer";
 })
-.AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuers = new[] { "https://localhost:44384", "https://your-other-issuer.com" }, // Replace with your valid issuers
-        ValidAudiences = new[] { "https://localhost:44384", "https://your-other-audience.com" }, // Replace with your valid audiences
-        IssuerSigningKey = new SymmetricSecurityKey(key)
-    };
-});
+.AddScheme<Microsoft.AspNetCore.Authentication.AuthenticationSchemeOptions, SupabaseAuthHandler>("Bearer", options => { });
 
-builder.Services.AddSingleton(new JwtTokenService("ja9LS02MnUixI/NNYYvjgQbtAg210NK9jrg53yg+fwY=", "https://localhost:44384", "https://localhost:44384"));
+// Add Authorization services (required for [Authorize] attribute)
+builder.Services.AddAuthorization();
+
 builder.Services.AddSingleton<SupabaseTokenService>();
 builder.Services.AddScoped<EmailRepository>();
 builder.Services.AddScoped<IAnamneseRepository, AnamneseRepository>();
@@ -104,6 +81,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Use custom JWT middleware instead of the built-in one
+app.UseMiddleware<SupabaseJwtMiddleware>();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

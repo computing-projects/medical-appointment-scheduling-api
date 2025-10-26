@@ -1,43 +1,109 @@
-using System.Security.Cryptography;
-using System.Text;
-using Supabase.Gotrue;
-using medical_appointment_scheduling_api.Models;
+using System.Security.Claims;
 using medical_appointment_scheduling_api.Models.DTO;
 using medical_appointment_scheduling_api.Repositories;
 using medical_appointment_scheduling_api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly JwtTokenService _jwtTokenService;
-    private readonly IUsersRepository _usersRepository;
     private readonly SupabaseTokenService _supabaseTokenService;
-    public AuthController(JwtTokenService jwtTokenService, SupabaseTokenService supabaseTokenService, IUsersRepository usersRepository)
+    private readonly IUsersRepository _usersRepository;
+
+    public AuthController(SupabaseTokenService supabaseTokenService, IUsersRepository usersRepository)
     {
-        _jwtTokenService = jwtTokenService;
         _supabaseTokenService = supabaseTokenService;
         _usersRepository = usersRepository;
     }
 
     [HttpPost("DirectLogin")]
-    public async Task<IActionResult> LoginNormal([FromBody] LoginUser model)
+    public async Task<IActionResult> DirectLogin([FromBody] LoginRequest request)
     {
         if (!ModelState.IsValid)
             return BadRequest("Invalid payload.");
-        var user = await _usersRepository.GetByEmailAsync(model.Email);
-        if (user == null || !VerifyPassword(model.Password, user.PasswordHash))
-            return Unauthorized("Usuário ou senha inválidos.");
-        var newToken = _jwtTokenService.GenerateToken(user.Email, user.Id);
-        return Ok(new TokenDto { email = user.Email, token = newToken, role = user.Role});
+
+        try
+        {
+            var session = await _supabaseTokenService.SignInWithEmailAsync(request.Email, request.Password);
+            
+            if (session?.AccessToken == null)
+                return Unauthorized("Invalid email or password.");
+
+            return Ok(new TokenDto
+            {
+                email = session.User?.Email ?? request.Email,
+                token = session.AccessToken
+            });
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Unauthorized("Invalid email or password.");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Authentication failed: {ex.Message}");
+        }
     }
 
-    private bool VerifyPassword(string password, string passwordHash)
+    [HttpPost("Register")]
+    public async Task<IActionResult> Register([FromBody] LoginRequest request)
     {
-        using var sha = SHA256.Create();
-        var hashBytes = sha.ComputeHash(Encoding.UTF8.GetBytes(password));
-        var hashString = BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
-        return hashString == passwordHash.ToLowerInvariant();
+        if (!ModelState.IsValid)
+            return BadRequest("Invalid payload.");
+
+        try
+        {
+            var session = await _supabaseTokenService.SignUpWithEmailAsync(request.Email, request.Password);
+            
+            if (session?.AccessToken == null)
+                return BadRequest("Registration failed.");
+
+            return Ok(new TokenDto
+            {
+                email = session.User?.Email ?? request.Email,
+                token = session.AccessToken
+            });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest($"Registration failed: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Registration failed: {ex.Message}");
+        }
+    }
+
+    [HttpGet("CurrentUser")]
+    [Authorize]
+    public async Task<IActionResult> CurrentUser()
+    {
+        // Extract email from Supabase JWT
+        var email = User.FindFirstValue("email") ?? User.Identity?.Name;
+
+        if (string.IsNullOrEmpty(email))
+            return Unauthorized("Invalid token claims.");
+
+        try
+        {
+            // Fetch user data from database
+            var user = await _usersRepository.GetByEmailAsync(email);
+            
+            if (user == null)
+                return NotFound($"User with email {email} not found in database.");
+
+            return Ok(new CurrentUserDto
+            {
+                email = user.Email,
+                name = user.Name,
+                role = user.Role
+            });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error fetching user data: {ex.Message}");
+        }
     }
 }

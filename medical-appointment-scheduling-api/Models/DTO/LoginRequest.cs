@@ -1,12 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace medical_appointment_scheduling_api.Models
+namespace medical_appointment_scheduling_api.Models.DTO
 {
-    public class LoginUser
+    public class LoginRequest
     {
         [Required]
         public string Email { get; set; }
+        
         [Required]
         public string Password { get; set; }
     }
 }
+
