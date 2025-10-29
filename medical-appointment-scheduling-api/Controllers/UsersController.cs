@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using medical_appointment_scheduling_api.Models;
 using medical_appointment_scheduling_api.Repositories;
 using medical_appointment_scheduling_api.Models.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace medical_appointment_scheduling_api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUsersRepository _repo;

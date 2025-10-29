@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using medical_appointment_scheduling_api.Models;
 using medical_appointment_scheduling_api.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace medical_appointment_scheduling_api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class NotificationsController : ControllerBase
     {
         private readonly INotificationsRepository _repo;

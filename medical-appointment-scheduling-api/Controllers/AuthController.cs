@@ -96,6 +96,7 @@ public class AuthController : ControllerBase
 
             return Ok(new CurrentUserDto
             {
+                userId = user.Id,
                 email = user.Email,
                 name = user.Name,
                 role = user.Role
