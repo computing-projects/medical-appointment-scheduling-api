@@ -57,6 +57,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 builder.Services.AddSingleton<SupabaseTokenService>();
+builder.Services.AddSingleton<ProfilePhotoService>();
 builder.Services.AddScoped<EmailRepository>();
 builder.Services.AddScoped<IAnamneseRepository, AnamneseRepository>();
 builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();

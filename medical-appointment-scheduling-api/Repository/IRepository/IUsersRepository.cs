@@ -10,6 +10,7 @@ namespace medical_appointment_scheduling_api.Repositories
         Task<IEnumerable<Users>> GetAllAsync();
         Task<Users> GetByIdAsync(int id);
         Task<bool> RegisterAsync(Users user);
+        Task<bool> UpdateAsync(Users user);
         Task<bool> DeleteAsync(int id);
         Task<bool> ResetPasswordAsync(RedefinirSenhaDto senha);
         Task<Users> GetByEmailAsync(string Email);

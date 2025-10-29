@@ -57,16 +57,7 @@ namespace medical_appointment_scheduling_api.Repositories
 
             mailMessage.To.Add(to);
 
-            var result = await SendEmailAsync(mailMessage);
-            //Apenas para completar, ser� alterado depois
-            if (result)
-            {
-                Console.WriteLine("Email sent successfully."); 
-            }
-            else
-            {
-                Console.WriteLine("Failed to send email.");
-            }
+            await SendEmailAsync(mailMessage);
         }
 
         public async Task<bool> SendEmailAsync(MailMessage mailMessage)

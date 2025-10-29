@@ -40,9 +40,8 @@ namespace medical_appointment_scheduling_api.Repositories
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error sending notification: {ex.Message}");
                 return false;
             }
         }
