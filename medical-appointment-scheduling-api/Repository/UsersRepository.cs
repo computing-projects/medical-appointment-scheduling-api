@@ -31,6 +31,8 @@ namespace medical_appointment_scheduling_api.Repositories
             try
             {
                 user.PasswordHash = PasswordHasher.Hash(user.PasswordHash);
+                user.CreatedAt = DateTimeOffset.UtcNow;
+                user.UpdatedAt = DateTimeOffset.UtcNow;
                 _db.Users.Add(user);
                 await _db.SaveChangesAsync();
                 return true;
@@ -43,6 +45,7 @@ namespace medical_appointment_scheduling_api.Repositories
 
         public async Task<bool> UpdateAsync(Users user)
         {
+            user.UpdatedAt = DateTimeOffset.UtcNow;
             _db.Users.Update(user);
             await _db.SaveChangesAsync();
             return true;

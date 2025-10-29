@@ -31,6 +31,17 @@ namespace medical_appointment_scheduling_api.Repositories
 
         public async Task<Anamnese> CreateAsync(Anamnese anamnese)
         {
+            // Check if client already has an anamnese
+            var existingAnamnese = await _db.Anamnese
+                .FirstOrDefaultAsync(a => a.ClientId == anamnese.ClientId);
+            
+            if (existingAnamnese != null)
+            {
+                throw new InvalidOperationException($"Client {anamnese.ClientId} already has an anamnese record. Use update instead.");
+            }
+
+            anamnese.CreatedAt = DateTimeOffset.UtcNow;
+            anamnese.UpdatedAt = DateTimeOffset.UtcNow;
             _db.Anamnese.Add(anamnese);
             await _db.SaveChangesAsync();
             return anamnese;
@@ -45,6 +56,7 @@ namespace medical_appointment_scheduling_api.Repositories
             existingAnamnese.MedicalHistory = anamnese.MedicalHistory;
             existingAnamnese.Allergies = anamnese.Allergies;
             existingAnamnese.Notes = anamnese.Notes;
+            existingAnamnese.UpdatedAt = DateTimeOffset.UtcNow;
 
             await _db.SaveChangesAsync();
             return existingAnamnese;
