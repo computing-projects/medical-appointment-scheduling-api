@@ -27,6 +27,8 @@ namespace medical_appointment_scheduling_api.Repositories
 
         public async Task<bool> AgendarAsync(Appointments appointment)
         {
+            appointment.CreatedAt = DateTimeOffset.UtcNow;
+            appointment.UpdatedAt = DateTimeOffset.UtcNow;
             await _db.Appointments.AddAsync(appointment);
             await _db.SaveChangesAsync();
             return true;
@@ -34,6 +36,7 @@ namespace medical_appointment_scheduling_api.Repositories
 
         public async Task<bool> RemarcarAsync(Appointments appointment)
         {
+            appointment.UpdatedAt = DateTimeOffset.UtcNow;
             _db.Appointments.Update(appointment);
             await _db.SaveChangesAsync();
             return true;

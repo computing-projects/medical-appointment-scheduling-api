@@ -49,6 +49,10 @@ namespace medical_appointment_scheduling_api.Models
         [Column("deleted_at")]
         public DateTimeOffset DeletedAt { get; set; }
 
+        [MaxLength(500)]
+        [Column("profile_photo_url")]
+        public string? ProfilePhotoUrl { get; set; }
+
     }
 
     public static class PasswordHasher

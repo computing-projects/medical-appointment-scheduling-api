@@ -31,6 +31,17 @@ namespace medical_appointment_scheduling_api.Repositories
             try
             {
                 user.PasswordHash = PasswordHasher.Hash(user.PasswordHash);
+                user.CreatedAt = DateTimeOffset.UtcNow;
+                user.UpdatedAt = DateTimeOffset.UtcNow;
+                
+                // Set default profile photo if not provided
+                if (string.IsNullOrEmpty(user.ProfilePhotoUrl))
+                {
+                    // Use UI Avatars service to generate a default avatar based on user's name
+                    var initials = GetInitials(user.Name);
+                    user.ProfilePhotoUrl = $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(user.Name)}&size=200&background=random&color=fff&bold=true";
+                }
+                
                 _db.Users.Add(user);
                 await _db.SaveChangesAsync();
                 return true;
@@ -41,8 +52,21 @@ namespace medical_appointment_scheduling_api.Repositories
             }
         }
 
+        private string GetInitials(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return "U";
+
+            var parts = name.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length == 1)
+                return parts[0].Substring(0, Math.Min(2, parts[0].Length)).ToUpper();
+            
+            return $"{parts[0][0]}{parts[^1][0]}".ToUpper();
+        }
+
         public async Task<bool> UpdateAsync(Users user)
         {
+            user.UpdatedAt = DateTimeOffset.UtcNow;
             _db.Users.Update(user);
             await _db.SaveChangesAsync();
             return true;

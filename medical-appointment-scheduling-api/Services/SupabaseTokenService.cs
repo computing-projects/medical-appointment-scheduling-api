@@ -16,7 +16,13 @@ namespace medical_appointment_scheduling_api.Services
                 throw new InvalidOperationException("Supabase configuration is missing. Please check your appsettings.json file.");
             }
 
-            _supabase = new Supabase.Client(supabaseUrl, supabaseKey);
+            var options = new SupabaseOptions
+            {
+                AutoRefreshToken = true,
+                AutoConnectRealtime = false
+            };
+
+            _supabase = new Supabase.Client(supabaseUrl, supabaseKey, options);
         }
 
         public async Task<dynamic?> VerifyTokenAsync(string accessToken)
@@ -33,29 +39,43 @@ namespace medical_appointment_scheduling_api.Services
             }
         }
 
-        public async Task<dynamic?> SignInWithEmailAsync(string email, string password)
+        public async Task<Supabase.Gotrue.Session?> SignInWithEmailAsync(string email, string password)
         {
             try
             {
-                // Placeholder implementation
-                return new { AccessToken = "mock_token", User = new { Id = "user_id", Email = email } };
+                await _supabase.InitializeAsync();
+                var session = await _supabase.Auth.SignIn(email, password);
+                
+                if (session?.AccessToken == null)
+                {
+                    throw new UnauthorizedAccessException("Authentication failed - no session returned.");
+                }
+                
+                return session;
             }
             catch (Exception ex)
             {
-                throw new UnauthorizedAccessException("Invalid credentials.", ex);
+                throw new UnauthorizedAccessException($"Invalid credentials: {ex.Message}", ex);
             }
         }
 
-        public async Task<dynamic?> SignUpWithEmailAsync(string email, string password)
+        public async Task<Supabase.Gotrue.Session?> SignUpWithEmailAsync(string email, string password)
         {
             try
             {
-                // Placeholder implementation
-                return new { AccessToken = "mock_token", User = new { Id = "user_id", Email = email } };
+                await _supabase.InitializeAsync();
+                var session = await _supabase.Auth.SignUp(email, password);
+                
+                if (session?.AccessToken == null)
+                {
+                    throw new InvalidOperationException("Sign up failed - no session returned.");
+                }
+                
+                return session;
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Failed to create user.", ex);
+                throw new InvalidOperationException($"Failed to create user: {ex.Message}", ex);
             }
         }
 

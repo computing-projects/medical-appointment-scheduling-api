@@ -29,6 +29,8 @@ namespace medical_appointment_scheduling_api.Repositories
         {
             try
             {
+                notification.CreatedAt = DateTimeOffset.UtcNow;
+                notification.UpdatedAt = DateTimeOffset.UtcNow;
                 _db.Notifications.Add(notification);
                 await _db.SaveChangesAsync();
                 if (notification.Id != 0)
@@ -38,9 +40,8 @@ namespace medical_appointment_scheduling_api.Repositories
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error sending notification: {ex.Message}");
                 return false;
             }
         }

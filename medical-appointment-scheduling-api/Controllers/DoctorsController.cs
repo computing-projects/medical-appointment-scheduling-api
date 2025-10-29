@@ -4,11 +4,13 @@ using System.Runtime.CompilerServices;
 using medical_appointment_scheduling_api.Repositories;
 using Microsoft.Identity.Client;
 using medical_appointment_scheduling_api.Models.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace medical_appointment_scheduling_api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class DoctorsController : ControllerBase
     {
         private readonly IDoctorsRepository _repo;

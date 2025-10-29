@@ -27,6 +27,8 @@ namespace medical_appointment_scheduling_api.Repositories
 
         public async Task<bool> JoinWaitlistAsync(Waitlist waitlist)
         {
+            waitlist.CreatedAt = DateTimeOffset.UtcNow;
+            waitlist.UpdatedAt = DateTimeOffset.UtcNow;
             await _db.Waitlist.AddAsync(waitlist);
             await _db.SaveChangesAsync();
             return true;

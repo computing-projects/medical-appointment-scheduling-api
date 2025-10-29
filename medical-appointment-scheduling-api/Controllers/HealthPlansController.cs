@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using medical_appointment_scheduling_api.Models;
 using medical_appointment_scheduling_api.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class HealthPlansController : ControllerBase
 {
     private readonly IHealthPlansRepository _healthPlansRepository;
