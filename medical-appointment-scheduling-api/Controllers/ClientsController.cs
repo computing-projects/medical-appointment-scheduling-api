@@ -36,6 +36,7 @@ namespace medical_appointment_scheduling_api.Controllers
         }
 
         [HttpPost("Create")]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateAsync([FromBody] Clients client)
         {
             try

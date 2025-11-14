@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using medical_appointment_scheduling_api.Data;
 using medical_appointment_scheduling_api.Models;
+using medical_appointment_scheduling_api.Models.DTO;
 
 namespace medical_appointment_scheduling_api.Repositories
 {
