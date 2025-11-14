@@ -53,6 +53,14 @@ namespace medical_appointment_scheduling_api.Models
         [Column("profile_photo_url")]
         public string? ProfilePhotoUrl { get; set; }
 
+        [MaxLength(100)]
+        [Column("city")]
+        public string? City { get; set; }
+
+        [MaxLength(2)]
+        [Column("state")]
+        public string? State { get; set; }
+
     }
 
     public static class PasswordHasher
