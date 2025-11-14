@@ -22,6 +22,16 @@ namespace medical_appointment_scheduling_api.Models
         [Column("notes")]
         public string? Notes { get; set; }
 
+        [MaxLength(5)]
+        [Column("blood_type")]
+        public string? BloodType { get; set; }
+
+        [Column("weight_kg")]
+        public decimal? WeightKg { get; set; }
+
+        [Column("height_cm")]
+        public decimal? HeightCm { get; set; }
+
         [Column("created_at")]
         public DateTimeOffset CreatedAt { get; set; }
 
