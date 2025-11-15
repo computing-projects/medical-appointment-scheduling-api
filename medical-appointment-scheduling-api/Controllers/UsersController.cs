@@ -29,7 +29,7 @@ namespace medical_appointment_scheduling_api.Controllers
         public async Task<IActionResult> Register([FromBody] Users user)
         {
             var result = await _repo.RegisterAsync(user);
-            return Ok(result);
+            return Ok(new {result, user});
         }
 
         [HttpDelete("Delete/{id}")]
