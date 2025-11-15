@@ -1,3 +1,4 @@
+using System;
 using medical_appointment_scheduling_api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,7 +40,10 @@ namespace medical_appointment_scheduling_api.Data
 
             modelBuilder.Entity<Schedules>()
                 .Property(s => s.Weekday)
-                .HasConversion<string>();
+                .HasConversion(
+                    v => v.ToString().ToLowerInvariant(),
+                    v => (SystemEnums.Weekday)Enum.Parse(typeof(SystemEnums.Weekday), v, true)
+                );
 
             modelBuilder.Entity<Notifications>()
                 .Property(n => n.Channel)
