@@ -59,7 +59,19 @@ namespace medical_appointment_scheduling_api.Data
 
             modelBuilder.Entity<Waitlist>()
                 .Property(w => w.Status)
-                .HasConversion<string>();
+                .HasConversion(
+                    v => v.ToString().ToLowerInvariant(),
+                    v => (SystemEnums.WaitlistStatus)Enum.Parse(typeof(SystemEnums.WaitlistStatus), v, true)
+                );
+
+            // Convert AppointmentType enum: InPerson -> "in_person", Online -> "online"
+            // This matches the database CHECK constraint and DefaultValue attributes
+            modelBuilder.Entity<Waitlist>()
+                .Property(w => w.AppointmentType)
+                .HasConversion(
+                    v => v == SystemEnums.AppointmentType.InPerson ? "in_person" : "online",
+                    v => v == "in_person" ? SystemEnums.AppointmentType.InPerson : SystemEnums.AppointmentType.Online
+                );
         }
 
         public DbSet<Anamnese> Anamnese { get; set; }

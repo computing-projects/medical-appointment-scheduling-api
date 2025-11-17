@@ -7,7 +7,8 @@ namespace medical_appointment_scheduling_api.Repositories
     public interface IWaitlistRepository
     {
         Task<IEnumerable<Waitlist>> GetAllAsync();
-        Task<Waitlist> GetByIdAsync(int id);
+        Task<IEnumerable<Waitlist>> GetByDoctorIdAsync(int doctorId);
+        Task<IEnumerable<Waitlist>> GetByClientIdAsync(int clientId);
         Task<bool> JoinWaitlistAsync(Waitlist waitlist);
         Task<bool> LeaveWaitlistAsync(int Id);
     }

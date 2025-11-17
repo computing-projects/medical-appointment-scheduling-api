@@ -35,6 +35,24 @@ namespace medical_appointment_scheduling_api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetByUserId/{userId}")]
+        public async Task<IActionResult> GetByUserIdAsync([FromRoute] int userId)
+        {
+            try
+            {
+                var result = await _repo.GetByUserIdAsync(userId);
+                if (result == null)
+                    return NotFound(new { error = "Client not found", message = $"No client found for user ID {userId}" });
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving client for user ID {UserId}", userId);
+                return StatusCode(500, new { error = "Server error", message = "Failed to retrieve client" });
+            }
+        }
+
         [HttpPost("Create")]
         [AllowAnonymous]
         public async Task<IActionResult> CreateAsync([FromBody] Clients client)

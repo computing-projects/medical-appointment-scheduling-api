@@ -13,9 +13,13 @@ namespace medical_appointment_scheduling_api.Models
         [Column("client_id")]
         public int ClientId { get; set; }
 
-        [ForeignKey("Appointment")]
-        [Column("appointment_id")]
-        public int AppointmentId { get; set; }
+        [ForeignKey("Doctor")]
+        [Column("doctor_id")]
+        public int DoctorId { get; set; }
+
+        [ForeignKey("Clinic")]
+        [Column("clinic_id")]
+        public int? ClinicId { get; set; }
 
         [Required]
         [Column("position")]
@@ -24,6 +28,13 @@ namespace medical_appointment_scheduling_api.Models
         [Required]
         [Column("status")]
         public SystemEnums.WaitlistStatus Status { get; set; }
+
+        [Required]
+        [Column("appointment_type")]
+        public SystemEnums.AppointmentType AppointmentType { get; set; }
+
+        [Column("reason")]
+        public string? Reason { get; set; }
 
         [Column("created_at")]
         public DateTimeOffset CreatedAt { get; set; }
