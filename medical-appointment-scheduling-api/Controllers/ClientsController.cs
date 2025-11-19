@@ -31,8 +31,28 @@ namespace medical_appointment_scheduling_api.Controllers
         [HttpGet("GetById/{id}")]
         public async Task<IActionResult> GetByIdAsync([FromQuery] int id)
         {
+
+            var mockUserProfile = new
+            {
+                photo = "",
+                name = "Nome do Paciente",
+                contact = "(XX) XXXXX-XXXX",
+                age = 35,
+                state = "SP",
+                healthPlans = new[] { "Unimed", "Bradesco Saúde" },
+                email = "paciente@example.com",
+                cpf = "XXX.XXX.XXX-XX",
+                city = "São Paulo",
+                cep = "XXXXX-XXX",
+                consultas = 15,
+                exames = 8,
+                cirurgias = 1,
+                procedimentos = 3,
+                agendamentosCanceladosOuFaltados = 2
+            };
+
             var result = await _repo.GetByIdAsync(id);
-            return Ok(result);
+            return Ok(mockUserProfile);
         }
 
         [HttpPost("Create")]
