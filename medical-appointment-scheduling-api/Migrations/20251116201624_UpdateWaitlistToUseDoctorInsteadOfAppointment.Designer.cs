@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using medical_appointment_scheduling_api.Data;
@@ -11,9 +12,11 @@ using medical_appointment_scheduling_api.Data;
 namespace medical_appointment_scheduling_api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251116201624_UpdateWaitlistToUseDoctorInsteadOfAppointment")]
+    partial class UpdateWaitlistToUseDoctorInsteadOfAppointment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -507,7 +510,8 @@ namespace medical_appointment_scheduling_api.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
-                    b.Property<DateTimeOffset?>("DeletedAt")
+                    b.Property<DateTimeOffset>("DeletedAt")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("deleted_at");
 
@@ -567,11 +571,6 @@ namespace medical_appointment_scheduling_api.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AppointmentType")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("appointment_type");
-
                     b.Property<int>("ClientId")
                         .HasColumnType("integer")
                         .HasColumnName("client_id");
@@ -591,10 +590,6 @@ namespace medical_appointment_scheduling_api.Migrations
                     b.Property<int>("Position")
                         .HasColumnType("integer")
                         .HasColumnName("position");
-
-                    b.Property<string>("Reason")
-                        .HasColumnType("text")
-                        .HasColumnName("reason");
 
                     b.Property<string>("Status")
                         .IsRequired()

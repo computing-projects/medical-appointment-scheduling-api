@@ -55,7 +55,7 @@ namespace medical_appointment_scheduling_api.Controllers
         }
 
         [HttpGet("GetAllHealthPlansByDoctorId/{doctorId}")]
-        public async Task<IActionResult> GetAllHealthPlansByDoctorIdAsync([FromQuery] int doctorId)
+        public async Task<IActionResult> GetAllHealthPlansByDoctorIdAsync([FromRoute] int doctorId)
         {
             var result = await _repo.GetAllHealthPlansByDoctorIdAsync(doctorId);
             return Ok(result);

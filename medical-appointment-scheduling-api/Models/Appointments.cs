@@ -42,6 +42,16 @@ namespace medical_appointment_scheduling_api.Models
         [Column("video_call_link")]
         public string? VideoCallLink { get; set; }
 
+        [Required]
+        [Column("category")]
+        public SystemEnums.AppointmentCategory Category { get; set; } = SystemEnums.AppointmentCategory.Consultation;
+
+        [Column("reason")]
+        public string? Reason { get; set; }
+
+        [Column("canceled_at")]
+        public DateTimeOffset? CanceledAt { get; set; }
+
         [Column("created_at")]
         public DateTimeOffset CreatedAt { get; set; }
 

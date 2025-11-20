@@ -47,6 +47,14 @@ namespace medical_appointment_scheduling_api.Models
             [DefaultValue("no_show")] NoShow = 4
         }
 
+        public enum AppointmentCategory : sbyte
+        {
+            [DefaultValue("consultation")] Consultation = 1,
+            [DefaultValue("exam")] Exam = 2,
+            [DefaultValue("surgery")] Surgery = 3,
+            [DefaultValue("procedure")] Procedure = 4
+        }
+
         public enum WaitlistStatus : sbyte
         {
             [DefaultValue("pending")] Pending = 1,

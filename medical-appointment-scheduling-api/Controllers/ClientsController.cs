@@ -35,7 +35,26 @@ namespace medical_appointment_scheduling_api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetByUserId/{userId}")]
+        public async Task<IActionResult> GetByUserIdAsync([FromRoute] int userId)
+        {
+            try
+            {
+                var result = await _repo.GetByUserIdAsync(userId);
+                if (result == null)
+                    return NotFound(new { error = "Client not found", message = $"No client found for user ID {userId}" });
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving client for user ID {UserId}", userId);
+                return StatusCode(500, new { error = "Server error", message = "Failed to retrieve client" });
+            }
+        }
+
         [HttpPost("Create")]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateAsync([FromBody] Clients client)
         {
             try
@@ -84,18 +103,54 @@ namespace medical_appointment_scheduling_api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("GetConsultasAntigas/{id}")]
-        public async Task<IActionResult> GetConsultarAntigas([FromQuery]int id)
+        [HttpGet("GetPastAppointments/{id}")]
+        public async Task<IActionResult> GetPastAppointments([FromQuery]int id)
         {
-            var result = await _repo.GetConsultasAntigas(id);
+            var result = await _repo.GetPastAppointments(id);
             return Ok(result);
         }
 
-        [HttpGet("GetConsultasPendentes/{id}")]
-        public async Task<IActionResult> GetConsultarPendentes([FromQuery] int id)
+        [HttpGet("GetPendingAppointments/{id}")]
+        public async Task<IActionResult> GetPendingAppointments([FromQuery] int id)
         {
-            var result = await _repo.GetConsultasPendentes(id);
+            var result = await _repo.GetPendingAppointments(id);
             return Ok(result);
+        }
+
+        [HttpGet("{id}/Profile")]
+        public async Task<IActionResult> GetProfile(int id)
+        {
+            try
+            {
+                var profile = await _repo.GetProfileAsync(id);
+                if (profile == null)
+                    return NotFound(new { error = "Client not found", message = $"Client with ID {id} does not exist" });
+
+                return Ok(profile);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving client profile for ID {ClientId}", id);
+                return StatusCode(500, new { error = "Server error", message = "Failed to retrieve client profile" });
+            }
+        }
+
+        [HttpPut("{id}/Profile")]
+        public async Task<IActionResult> UpdateProfile(int id, [FromBody] Models.DTO.ClientProfileDto profileDto)
+        {
+            try
+            {
+                var success = await _repo.UpdateProfileAsync(id, profileDto);
+                if (!success)
+                    return NotFound(new { error = "Client not found", message = $"Client with ID {id} does not exist" });
+
+                return Ok(new { message = "Profile updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating client profile for ID {ClientId}", id);
+                return StatusCode(500, new { error = "Server error", message = "Failed to update client profile" });
+            }
         }
     }
 }
