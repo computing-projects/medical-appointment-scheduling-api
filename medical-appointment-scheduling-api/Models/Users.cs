@@ -47,7 +47,7 @@ namespace medical_appointment_scheduling_api.Models
         public DateTimeOffset UpdatedAt { get; set; }
 
         [Column("deleted_at")]
-        public DateTimeOffset DeletedAt { get; set; }
+        public DateTimeOffset? DeletedAt { get; set; }
 
         [MaxLength(500)]
         [Column("profile_photo_url")]

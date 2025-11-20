@@ -24,7 +24,12 @@ namespace medical_appointment_scheduling_api.Data
 
             modelBuilder.Entity<Users>()
                 .Property(u => u.DeletedAt)
-                .ValueGeneratedOnAddOrUpdate();
+                .IsRequired(false);
+
+            // Explicitly configure Clinics.DeletedAt as nullable
+            modelBuilder.Entity<Clinics>()
+                .Property(c => c.DeletedAt)
+                .IsRequired(false);
 
             modelBuilder.Entity<Doctors>()
                 .Property(d => d.Specialty)
@@ -37,6 +42,11 @@ namespace medical_appointment_scheduling_api.Data
             modelBuilder.Entity<Appointments>()
                 .Property(a => a.Status)
                 .HasConversion<string>();
+
+            // Explicitly configure Appointments.CanceledAt as nullable
+            modelBuilder.Entity<Appointments>()
+                .Property(a => a.CanceledAt)
+                .IsRequired(false);
 
             modelBuilder.Entity<Schedules>()
                 .Property(s => s.Weekday)
