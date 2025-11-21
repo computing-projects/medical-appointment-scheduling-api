@@ -26,8 +26,23 @@ namespace medical_appointment_scheduling_api.Controllers
 
         [HttpPost("Register")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] Users user)
+        public async Task<IActionResult> Register([FromBody] RegisterUserDto userDto)
         {
+            // Map DTO to Users entity
+            var user = new Users
+            {
+                Name = userDto.Name,
+                Email = userDto.Email,
+                PasswordHash = userDto.PasswordHash,
+                Cep = userDto.Cep,
+                Address = userDto.Address,
+                Phone = userDto.Phone,
+                Role = userDto.Role,
+                City = userDto.City,
+                State = userDto.State,
+                ProfilePhotoUrl = userDto.ProfilePhotoUrl
+            };
+
             var result = await _repo.RegisterAsync(user);
             return Ok(new {result, user});
         }
