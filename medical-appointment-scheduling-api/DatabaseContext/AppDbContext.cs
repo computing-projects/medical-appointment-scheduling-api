@@ -1,3 +1,4 @@
+using System;
 using medical_appointment_scheduling_api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,7 +24,12 @@ namespace medical_appointment_scheduling_api.Data
 
             modelBuilder.Entity<Users>()
                 .Property(u => u.DeletedAt)
-                .ValueGeneratedOnAddOrUpdate();
+                .IsRequired(false);
+
+            // Explicitly configure Clinics.DeletedAt as nullable
+            modelBuilder.Entity<Clinics>()
+                .Property(c => c.DeletedAt)
+                .IsRequired(false);
 
             modelBuilder.Entity<Doctors>()
                 .Property(d => d.Specialty)
@@ -37,9 +43,17 @@ namespace medical_appointment_scheduling_api.Data
                 .Property(a => a.Status)
                 .HasConversion<string>();
 
+            // Explicitly configure Appointments.CanceledAt as nullable
+            modelBuilder.Entity<Appointments>()
+                .Property(a => a.CanceledAt)
+                .IsRequired(false);
+
             modelBuilder.Entity<Schedules>()
                 .Property(s => s.Weekday)
-                .HasConversion<string>();
+                .HasConversion(
+                    v => v.ToString().ToLowerInvariant(),
+                    v => (SystemEnums.Weekday)Enum.Parse(typeof(SystemEnums.Weekday), v, true)
+                );
 
             modelBuilder.Entity<Notifications>()
                 .Property(n => n.Channel)
@@ -55,7 +69,19 @@ namespace medical_appointment_scheduling_api.Data
 
             modelBuilder.Entity<Waitlist>()
                 .Property(w => w.Status)
-                .HasConversion<string>();
+                .HasConversion(
+                    v => v.ToString().ToLowerInvariant(),
+                    v => (SystemEnums.WaitlistStatus)Enum.Parse(typeof(SystemEnums.WaitlistStatus), v, true)
+                );
+
+            // Convert AppointmentType enum: InPerson -> "in_person", Online -> "online"
+            // This matches the database CHECK constraint and DefaultValue attributes
+            modelBuilder.Entity<Waitlist>()
+                .Property(w => w.AppointmentType)
+                .HasConversion(
+                    v => v == SystemEnums.AppointmentType.InPerson ? "in_person" : "online",
+                    v => v == "in_person" ? SystemEnums.AppointmentType.InPerson : SystemEnums.AppointmentType.Online
+                );
         }
 
         public DbSet<Anamnese> Anamnese { get; set; }

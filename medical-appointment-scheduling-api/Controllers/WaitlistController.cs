@@ -26,10 +26,17 @@ namespace medical_appointment_scheduling_api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("GetById/{id}")]
-        public async Task<IActionResult> GetByIdAsync([FromQuery] int id)
+        [HttpGet("GetByDoctorId/{doctorId}")]
+        public async Task<IActionResult> GetByDoctorIdAsync(int doctorId)
         {
-            var result = await _repo.GetByIdAsync(id);
+            var result = await _repo.GetByDoctorIdAsync(doctorId);
+            return Ok(result);
+        }
+
+        [HttpGet("GetByClientId/{clientId}")]
+        public async Task<IActionResult> GetByClientIdAsync(int clientId)
+        {
+            var result = await _repo.GetByClientIdAsync(clientId);
             return Ok(result);
         }
 
