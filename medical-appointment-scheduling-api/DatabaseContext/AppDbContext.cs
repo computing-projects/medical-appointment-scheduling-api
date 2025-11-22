@@ -65,7 +65,10 @@ namespace medical_appointment_scheduling_api.Data
 
             modelBuilder.Entity<ClinicUsers>()
                 .Property(cu => cu.Role)
-                .HasConversion<string>();
+                .HasConversion(
+                    v => v.ToString().ToLowerInvariant(),
+                    v => (SystemEnums.ETipoClinicUser)Enum.Parse(typeof(SystemEnums.ETipoClinicUser), v, true)
+                );
 
             modelBuilder.Entity<Waitlist>()
                 .Property(w => w.Status)

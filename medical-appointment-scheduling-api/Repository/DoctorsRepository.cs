@@ -26,6 +26,12 @@ namespace medical_appointment_scheduling_api.Repositories
             return await _db.Doctors.FindAsync(id);
         }
 
+        public async Task<Doctors?> GetByUserIdAsync(int userId)
+        {
+            return await _db.Doctors
+                .FirstOrDefaultAsync(d => d.UserId == userId);
+        }
+
         public async Task<bool> CreateAsync(Doctors doctor)
         {
             await _db.Doctors.AddAsync(doctor);

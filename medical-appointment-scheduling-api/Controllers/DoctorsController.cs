@@ -30,9 +30,19 @@ namespace medical_appointment_scheduling_api.Controllers
         }
 
         [HttpGet("GetById/{id}")]
-        public async Task<IActionResult> GetByIdAsync([FromQuery] int id)
+        public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
         {
             var result = await _repo.GetByIdAsync(id);
+            return Ok(result);
+        }
+
+        [HttpGet("GetByUserId/{userId}")]
+        public async Task<IActionResult> GetByUserIdAsync([FromRoute] int userId)
+        {
+            var result = await _repo.GetByUserIdAsync(userId);
+            if (result == null)
+                return NotFound(new { error = "Doctor not found", message = $"No doctor found for user ID {userId}" });
+            
             return Ok(result);
         }
 

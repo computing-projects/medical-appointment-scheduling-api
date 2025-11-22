@@ -9,6 +9,7 @@ namespace medical_appointment_scheduling_api.Repositories
     {
         Task<IEnumerable<Doctors>> GetAllAsync();
         Task<Doctors> GetByIdAsync(int id);
+        Task<Doctors?> GetByUserIdAsync(int userId);
         Task<bool> CreateAsync(Doctors doctor);
         Task<bool> UpdateAsync(Doctors doctor);
         Task<bool> DeleteAsync(int id);
